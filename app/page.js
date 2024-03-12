@@ -1,6 +1,4 @@
-import { signInGithub } from "@/actions/auth";
-import { Button } from "@/components/ui/button";
-import { BiLogoGithub } from "react-icons/bi";
+import ButtonGithub from "@/components/ButtonGithub";
 
 export default function Home() {
   return (
@@ -13,14 +11,7 @@ export default function Home() {
         tracking tool tailored specifically for developers. Stay focused,
         organized, and maximize productivity effortlessly.
       </p>
-      <form action={signInGithub} className="flex gap-16">
-        <Button size="lg" className="flex items-center gap-2">
-          Continue with
-          <div className="flex items-center">
-            GitHub <BiLogoGithub className="text-xl" />
-          </div>
-        </Button>
-      </form>
+      <ButtonGithub />
     </main>
   );
 }

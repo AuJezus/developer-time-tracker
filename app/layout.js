@@ -1,6 +1,7 @@
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
         )}
       >
         {children}
+        <Toaster richColors theme="dark" />
       </body>
     </html>
   );

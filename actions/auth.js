@@ -44,22 +44,3 @@ export async function signup(formData) {
   revalidatePath("/", "layout");
   redirect("/account");
 }
-
-export async function signInGithub() {
-  const supabase = createClient();
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "github",
-    options: {
-      redirectTo: "http://localhost:3000/auth/confirm",
-    },
-  });
-  console.log(data);
-
-  if (error) {
-    redirect("/error");
-  }
-
-  revalidatePath("/", "layout");
-  redirect("/profile");
-}

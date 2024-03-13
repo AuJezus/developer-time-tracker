@@ -1,8 +1,16 @@
 import { updateSession } from "@/lib/supabase/middleware";
+import { NextResponse } from "next/server";
 
-export async function middleware(request) {
-  // update user's auth session
-  return await updateSession(request);
+export async function middleware(req) {
+  // Update user's auth session
+  const { response, supabase, user } = await updateSession(req);
+
+  // Protect routes from unauthenticated users
+  if (!user?.id) {
+    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
+  }
+
+  return response;
 }
 
 export const config = {
@@ -14,6 +22,8 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+
+    "/profile/:path*",
   ],
 };

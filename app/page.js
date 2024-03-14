@@ -1,4 +1,5 @@
 import ButtonGithub from "@/components/ButtonGithub";
+import ButtonSignOut from "@/components/ButtonSignOut";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         organized, and maximize productivity effortlessly.
       </p>
       <ButtonGithub />
+      <ButtonSignOut />
     </main>
   );
 }

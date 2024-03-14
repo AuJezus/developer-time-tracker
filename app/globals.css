@@ -76,7 +76,7 @@
 
 @layer components {
   .nav {
-    @apply grid-cols-[33px_1fr];
+    @apply grid-cols-[36px_1fr];
   }
 
   .nav:has(.side-nav:hover) {

@@ -73,3 +73,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .nav {
+    @apply grid-cols-[33px_1fr];
+  }
+
+  .nav:has(.side-nav:hover) {
+    @apply grid-cols-[200px_1fr];
+  }
+}

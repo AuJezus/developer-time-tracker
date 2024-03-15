@@ -9,16 +9,28 @@ const projects = [
   "gym-tracker",
   "exrx-scraper",
   "car-events",
-  // "rate-my-link",
-  // "spotify-clone",
-  // "learn-next",
-  // "forkify",
-  // "todo-cli",
-  // "picvert",
-  // "page-text-extractor",
-  // "aujezus-play",
-  // "writingsdev",
-  // "pazusiu-bitynas",
+  "rate-my-link",
+  "spotify-clone",
+  "learn-next",
+  "forkify",
+  "todo-cli",
+  "picvert",
+  "page-text-extractor",
+  "aujezus-play",
+  "writingsdev",
+  "pazusiu-bitynas",
+  "exrx-scraper",
+  "car-events",
+  "rate-my-link",
+  "spotify-clone",
+  "learn-next",
+  "forkify",
+  "todo-cli",
+  "picvert",
+  "page-text-extractor",
+  "aujezus-play",
+  "writingsdev",
+  "pazusiu-bitynas",
 ];
 
 // const iconName = "BiLogoVenmo";
@@ -35,7 +47,7 @@ const projects = [
 function SideNav() {
   return (
     // There is .nav, .side-nav classes for handling on hover slide out in globals.css
-    <div className="row-span-2 border-r-2 side-nav sticky top-0 h-screen flex flex-col gap-5 py-6 justify-center">
+    <div className="row-span-2 overflow-y-scroll no-scrollbar border-r-2 side-nav sticky top-0 h-screen flex flex-col gap-5 py-6 justify-center">
       {projects.map((project) => (
         <Link
           href="/"

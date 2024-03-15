@@ -15,7 +15,7 @@ async function NavWrapper({ children }) {
     <div className="grid nav grid-rows-[auto_1fr] transition-all relative">
       <SideNav />
       <TopNav user={user} />
-      <div className="h-[10000px]">{children}</div>
+      <div className="w-[1200px] mx-auto">{children}</div>
     </div>
   );
 }

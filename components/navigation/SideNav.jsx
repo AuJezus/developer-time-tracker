@@ -19,18 +19,6 @@ const projects = [
   "aujezus-play",
   "writingsdev",
   "pazusiu-bitynas",
-  "exrx-scraper",
-  "car-events",
-  "rate-my-link",
-  "spotify-clone",
-  "learn-next",
-  "forkify",
-  "todo-cli",
-  "picvert",
-  "page-text-extractor",
-  "aujezus-play",
-  "writingsdev",
-  "pazusiu-bitynas",
 ];
 
 // const iconName = "BiLogoVenmo";

@@ -108,7 +108,7 @@ async function ProfilePage({ id }) {
   } = await supabase.auth.getUser();
 
   return (
-    <main className="pt-8 mb-12">
+    <main className="pt-8 mb-12 max-w-[1200px] mx-auto">
       <div className="flex border-b-2 p-6 justify-around mb-8">
         <div className="flex items-center gap-10">
           <div className="relative w-24 h-24">
@@ -161,28 +161,6 @@ async function ProfilePage({ id }) {
             </span>
           </p>
         </div>
-
-        {/* <div className="flex flex-col gap-2 text-sm w-1/4">
-          <h3>Favourite tools:</h3>
-          <div className="ml-3 flex justify-start flex-wrap gap-x-1 gap-y-2">
-            <div className="bg-blue-800 gap-1 px-2 py-0.5 flex items-center justify-center rounded-sm">
-              <BiLogoVisualStudio />
-              VS Code
-            </div>
-            <div className="bg-yellow-600 gap-1 px-2 py-0.5 flex items-center justify-center rounded-sm">
-              <BiLogoJavascript />
-              Javascript
-            </div>
-            <div className="bg-blue-800 gap-2 px-2 py-0.5 flex items-center justify-center rounded-sm">
-              <BiLogoReact />
-              React
-            </div>
-            <div className="bg-neutral-800 gap-2 px-2 py-0.5 flex items-center justify-center rounded-sm">
-              <TbBrandNextjs />
-              Next
-            </div>
-          </div>
-        </div> */}
       </div>
 
       <div className="flex justify-around mb-10">

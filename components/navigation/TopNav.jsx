@@ -1,7 +1,6 @@
 "use client";
 
 import useScrollUp from "@/lib/useScrollUp";
-import { Button } from "../ui/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import ButtonGithub from "../ButtonGithub";
 import { BiCircle, BiTerminal, BiTime, BiUser, BiWrench } from "react-icons/bi";
@@ -14,6 +13,7 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from "../ui/NavigationMenu";
+import ButtonStartCode from "../ButtonStartCode";
 
 export function TopNavUser({ user }) {
   return (
@@ -86,9 +86,7 @@ function TopNav({ user }) {
       </div>
       {user && (
         <>
-          <Button variant="outline" className="gap-2" size="sm">
-            Start Coding <BiTime className="text-lg" />
-          </Button>
+          <ButtonStartCode />
           <TopNavUser user={user} />
         </>
       )}

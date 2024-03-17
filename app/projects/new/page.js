@@ -30,7 +30,7 @@ async function NewProjectPage() {
           <SelectContent>
             {repos.map((repo) => (
               <SelectItem key={repo.id} value={repo.id.toString()}>
-                <Select>{repo.name}</Select>
+                {repo.name}
               </SelectItem>
             ))}
           </SelectContent>

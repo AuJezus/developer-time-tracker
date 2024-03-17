@@ -3,46 +3,57 @@
 import { BiTime } from "react-icons/bi";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/Button";
+import { Button, buttonVariants } from "./ui/Button";
 import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@/lib/supabase/client";
-// import { createClient } from "@/lib/supabase/server";
+import { useState } from "react";
+import { getUserProjects } from "@/lib/actions/projects";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/Select";
+import { startLog } from "@/lib/actions/logs";
 
 function ButtonStartCode({ userId }) {
-  // const supabase = createClient();
-  // const { projects, error } = supabase.from("projects").select("id, name");
-  // console.log(projects);
+  const [open, setOpen] = useState(false);
 
-  const {
-    data: projects,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: projects } = useQuery({
     queryKey: ["projects/user", userId],
-    queryFn: async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("user_id", userId);
-      return data;
-    },
-    enabled: !!userId,
+    queryFn: () => getUserProjects(userId),
+    enabled: userId && open,
   });
 
-  if (isLoading) return <p>Loading..</p>;
-
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         className={cn(buttonVariants({ variant: "outline" }), "gap-2 text-sm")}
       >
         Start Coding <BiTime className="text-lg" />
       </PopoverTrigger>
       <PopoverContent>
-        {projects.map((project) => (
-          <p key={project.id}>{project.name}</p>
-        ))}
+        <form action={startLog} className="flex gap-2">
+          {!projects && <p>Loading...</p>}
+          {projects && (
+            <>
+              <Select name="id">
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Project" />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((project) => (
+                    <SelectItem key={project.id} value={project.id.toString()}>
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Button>Start!</Button>
+            </>
+          )}
+        </form>
       </PopoverContent>
     </Popover>
   );

@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
-import { startLog } from "@/lib/actions/logs";
+import { createNewLog, startLog } from "@/lib/actions/logs";
 
 function ButtonStartCode({ userId }) {
   const [open, setOpen] = useState(false);
@@ -37,7 +37,7 @@ function ButtonStartCode({ userId }) {
           {!projects && <p>Loading...</p>}
           {projects && (
             <>
-              <Select name="id">
+              <Select name="project_id">
                 <SelectTrigger>
                   <SelectValue placeholder="Select Project" />
                 </SelectTrigger>
@@ -50,7 +50,7 @@ function ButtonStartCode({ userId }) {
                 </SelectContent>
               </Select>
 
-              <Button>Start!</Button>
+              <Button type="submit">Start!</Button>
             </>
           )}
         </form>

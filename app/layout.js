@@ -33,8 +33,10 @@ export default async function RootLayout({ children }) {
         <ReactQueryProvider>
           {/* <NavWrapper>{children}</NavWrapper> */}
 
-          <TopNav user={user} />
-          {children}
+          <div className="flex flex-col min-h-screen">
+            <TopNav user={user} />
+            {children}
+          </div>
 
           <Toaster richColors theme="dark" />
         </ReactQueryProvider>

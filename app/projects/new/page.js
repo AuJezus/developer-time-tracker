@@ -1,4 +1,4 @@
-import { createProject } from "@/actions/projects";
+import { createProject } from "@/lib/actions/projects";
 import {
   Select,
   SelectContent,

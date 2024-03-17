@@ -30,12 +30,14 @@ export default async function RootLayout({ children }) {
           fontMono.variable
         )}
       >
-        {/* <NavWrapper>{children}</NavWrapper> */}
+        <ReactQueryProvider>
+          {/* <NavWrapper>{children}</NavWrapper> */}
 
-        <TopNav user={user} />
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+          <TopNav user={user} />
+          {children}
 
-        <Toaster richColors theme="dark" />
+          <Toaster richColors theme="dark" />
+        </ReactQueryProvider>
       </body>
     </html>
   );

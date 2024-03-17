@@ -1,6 +1,6 @@
 "use client";
 
-import useScrollUp from "@/lib/useScrollUp";
+import useScrollUp from "@/lib/helpers/useScrollUp";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import ButtonGithub from "../ButtonGithub";
 import { BiCircle, BiTerminal, BiTime, BiUser, BiWrench } from "react-icons/bi";
@@ -86,7 +86,7 @@ function TopNav({ user }) {
       </div>
       {user && (
         <>
-          <ButtonStartCode />
+          <ButtonStartCode userId={user.id} />
           <TopNavUser user={user} />
         </>
       )}

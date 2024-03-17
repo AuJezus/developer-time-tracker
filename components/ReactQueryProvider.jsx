@@ -6,12 +6,11 @@ import { useState } from "react";
 
 function ReactQueryProvider({ children }) {
   const [queryClient] = useState(() => new QueryClient());
-  console.log(queryClient);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
       <ReactQueryDevtools initialIsOpen={false} />
+      {children}
     </QueryClientProvider>
   );
 }

@@ -201,7 +201,7 @@ async function ProfilePage({ id }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="projects" asChild>
-          <Link href="/project/:id" className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-6">
             {projects.map((project) => (
               <div
                 key={project}
@@ -238,7 +238,7 @@ async function ProfilePage({ id }) {
                 </div>
               </div>
             ))}
-          </Link>
+          </div>
         </TabsContent>
 
         <TabsContent

@@ -1,7 +1,7 @@
 "use client";
 
 import { BiTime } from "react-icons/bi";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/Button";
 import { useQuery } from "@tanstack/react-query";

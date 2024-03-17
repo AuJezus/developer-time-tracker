@@ -1,7 +1,7 @@
 "use client";
 
 import useScrollUp from "@/lib/helpers/useScrollUp";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import ButtonGithub from "../ButtonGithub";
 import { BiCircle, BiTerminal, BiTime, BiUser, BiWrench } from "react-icons/bi";
 import Link from "next/link";

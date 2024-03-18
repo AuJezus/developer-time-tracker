@@ -1,8 +1,11 @@
 import ButtonStartCode from "@/components/ButtonStartCode";
 import GithubActivity from "@/components/GithubActivity";
+import LogTimer from "@/components/LogTimer";
+import { Button } from "@/components/ui/Button";
 import { getCurrentLog } from "@/lib/actions/logs";
 import CatImage from "@/public/cat-nails.gif";
 import Image from "next/image";
+import { BiCircle } from "react-icons/bi";
 
 async function WorkPage() {
   const currentLog = await getCurrentLog();
@@ -20,10 +23,21 @@ async function WorkPage() {
     );
 
   return (
-    <div>
-      <p>00:32</p>
+    <main className="max-w-[1000px] mx-auto pt-12 w-full">
+      <div className="mb-6 border-b-2 pb-6">
+        <div className="flex items-center gap-4 mb-6 justify-center">
+          <BiCircle className="text-green-500 text-3xl" />
+          <LogTimer startDate={currentLog.start} className="text-7xl" />
+        </div>
+
+        <div className="flex gap-6 justify-center">
+          <Button variant="outline">Pause</Button>
+          <Button variant="destructive">End</Button>
+        </div>
+      </div>
+
       <GithubActivity log={currentLog} />
-    </div>
+    </main>
   );
 }
 

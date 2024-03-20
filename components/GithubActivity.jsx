@@ -31,7 +31,6 @@ function GithubActivity({ log }) {
     queryFn: () => getAllEventStats(events),
     enabled: !isLoading,
   });
-  console.log(commitStats);
 
   if (!events) return;
 

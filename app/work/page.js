@@ -2,14 +2,17 @@ import ButtonStartCode from "@/components/ButtonStartCode";
 import GithubActivity from "@/components/GithubActivity";
 import LogTimer from "@/components/LogTimer";
 import { Button } from "@/components/ui/Button";
-import { getCurrentLog } from "@/lib/actions/logs";
+import { getCurrentLog, getLogPauseEvents, pauseLog } from "@/lib/actions/logs";
 import CatImage from "@/public/cat-nails.gif";
 import Image from "next/image";
 import { BiCircle } from "react-icons/bi";
 import * as dayjs from "dayjs";
+import { calculateTimespan } from "@/lib/utils";
 
 async function WorkPage() {
   const currentLog = await getCurrentLog();
+  const pauseEvents = await getLogPauseEvents(currentLog.id);
+  const initialDuration = calculateTimespan(currentLog, pauseEvents);
 
   if (!currentLog)
     return (
@@ -30,15 +33,11 @@ async function WorkPage() {
           {dayjs(currentLog.start).format("YYYY MMM D, ddd HH:mm")}
         </p>
 
-        <div className="flex items-center gap-4 mb-6 justify-center">
-          <BiCircle className="text-green-500 text-3xl" />
-          <LogTimer startDate={currentLog.start} className="text-7xl" />
-        </div>
-
-        <div className="flex gap-6 justify-center">
-          <Button variant="outline">Pause</Button>
-          <Button variant="destructive">End</Button>
-        </div>
+        <LogTimer
+          initialLog={currentLog}
+          initialPauseEvents={pauseEvents}
+          initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
+        />
       </div>
 
       <GithubActivity log={currentLog} />

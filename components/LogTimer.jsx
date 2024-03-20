@@ -3,26 +3,95 @@
 import { useEffect, useState } from "react";
 import * as duration from "dayjs/plugin/duration";
 import * as dayjs from "dayjs";
+import { BiCircle } from "react-icons/bi";
+import { Button } from "./ui/Button";
+import { getCurrentLog, getLogPauseEvents, pauseLog } from "@/lib/actions/logs";
+import { useQuery } from "@tanstack/react-query";
+import usePauseMutation from "@/lib/mutations/usePauseMutation";
+import useResumeMutation from "@/lib/mutations/useResumeMutation";
+import { calculateTimespan } from "@/lib/utils";
+import useEndMutation from "@/lib/mutations/useEndMutation";
 dayjs.extend(duration);
 
-function LogTimer({ startDate, ...props }) {
-  const start = dayjs(startDate);
+function LogTimer({ initialLog, initialPauseEvents, initialDuration }) {
+  const { data: log, errorLog } = useQuery({
+    queryKey: ["log", initialLog.id],
+    queryFn: () => getCurrentLog(),
+    initialData: initialLog,
+  });
 
-  const [timeSpan, setTimeSpan] = useState(dayjs.duration(dayjs().diff(start)));
+  const { data: pauseEvents, errorPauseEvents } = useQuery({
+    queryKey: ["log", "pauseEvents", initialLog.id],
+    queryFn: () => getLogPauseEvents(initialLog.id),
+    initialData: initialPauseEvents,
+  });
+
+  const pauseMutation = usePauseMutation();
+  const resumeMutation = useResumeMutation();
+  const endMutation = useEndMutation();
+
+  const [timeSpan, setTimeSpan] = useState(dayjs.duration(initialDuration));
 
   useEffect(() => {
-    function setTime() {
-      setTimeSpan(dayjs.duration(dayjs().diff(start)));
-    }
-
     const interval = setInterval(() => {
-      setTime();
+      setTimeSpan(calculateTimespan(log, pauseEvents));
     }, 1000);
 
     return () => clearInterval(interval);
-  });
+  }, [log, pauseEvents]);
 
-  return <div {...props}>{timeSpan.format("HH:mm:ss")}</div>;
+  return (
+    <div>
+      <div className="flex items-center gap-4 mb-6 justify-center">
+        <BiCircle
+          className={`${log.end ? "!text-red-500" : ""} ${
+            log.is_paused ? "text-yellow-500" : "text-green-500"
+          } text-3xl`}
+        />
+        <div className="text-7xl">{timeSpan.format("HH:mm:ss")}</div>
+      </div>
+
+      <div className="flex gap-6 justify-center">
+        {!log.is_paused && (
+          <Button
+            onClick={() =>
+              pauseMutation.mutate({
+                logId: log.id,
+                time: dayjs().toISOString(),
+              })
+            }
+            variant="outline"
+          >
+            Pause
+          </Button>
+        )}
+        {log.is_paused && (
+          <Button
+            onClick={() =>
+              resumeMutation.mutate({
+                logId: log.id,
+                time: dayjs().toISOString(),
+              })
+            }
+            variant="outline"
+          >
+            Resume
+          </Button>
+        )}
+        <Button
+          onClick={() =>
+            endMutation.mutate({
+              logId: log.id,
+              time: dayjs().toISOString(),
+            })
+          }
+          variant="destructive"
+        >
+          End
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 export default LogTimer;

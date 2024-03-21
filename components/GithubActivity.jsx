@@ -92,7 +92,7 @@ function GithubActivity({ log }) {
                 </p>
               </div>
 
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap gap-3">
                 {event.payload.commits.map((commit) => (
                   <div key={commit.sha} className="text-sm">
                     <a
@@ -105,7 +105,7 @@ function GithubActivity({ log }) {
                       target="_blank"
                       className="flex gap-2 border-2 px-2 py-1 rounded-md hover:bg-secondary transition-colors items-baseline"
                     >
-                      <BiLogoGithub />
+                      <BiLogoGithub className="flex-shrink-0" />
                       &quot;{commit.message}&quot;
                     </a>
                   </div>

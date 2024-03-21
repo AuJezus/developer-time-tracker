@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { createClient } from "@/lib/supabase/server";
 import TopNav from "@/components/navigation/TopNav";
-import ReactQueryProvider from "@/components/ReactQueryProvider";
+import ReactQueryProvider from "@/components/helpers/ReactQueryProvider";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 

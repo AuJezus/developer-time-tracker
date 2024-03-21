@@ -5,18 +5,18 @@ import * as duration from "dayjs/plugin/duration";
 import * as dayjs from "dayjs";
 import { BiCircle } from "react-icons/bi";
 import { Button } from "./ui/Button";
-import { getCurrentLog, getLogPauseEvents, pauseLog } from "@/lib/actions/logs";
+import { getActiveLog, getLogPauseEvents } from "@/lib/actions/logs";
 import { useQuery } from "@tanstack/react-query";
 import usePauseMutation from "@/lib/mutations/usePauseMutation";
 import useResumeMutation from "@/lib/mutations/useResumeMutation";
-import { calculateTimespan } from "@/lib/utils";
 import useEndMutation from "@/lib/mutations/useEndMutation";
+import calculateTimespan from "@/lib/helpers/calculateTimespan";
 dayjs.extend(duration);
 
 function LogTimer({ initialLog, initialPauseEvents, initialDuration }) {
   const { data: log, errorLog } = useQuery({
     queryKey: ["log", initialLog.id],
-    queryFn: () => getCurrentLog(),
+    queryFn: getActiveLog,
     initialData: initialLog,
   });
 
@@ -33,9 +33,12 @@ function LogTimer({ initialLog, initialPauseEvents, initialDuration }) {
   const [timeSpan, setTimeSpan] = useState(dayjs.duration(initialDuration));
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeSpan(calculateTimespan(log, pauseEvents));
-    }, 1000);
+    if (log.is_paused || log.end) return;
+
+    const interval = setInterval(
+      () => setTimeSpan(calculateTimespan(log, pauseEvents)),
+      1000
+    );
 
     return () => clearInterval(interval);
   }, [log, pauseEvents]);

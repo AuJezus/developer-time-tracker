@@ -2,22 +2,9 @@
 
 import { BiLogoGithub } from "react-icons/bi";
 import { Button } from "./ui/Button";
-import { createClient } from "@/lib/supabase/client";
-import { toast } from "sonner";
+import { signInWithGithub } from "@/lib/supabase/auth";
 
 function ButtonGithub() {
-  function signInWithGithub() {
-    const supabase = createClient();
-    const { error } = supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: "http://localhost:3000/auth/confirm",
-      },
-    });
-
-    if (error) toast.error(error);
-  }
-
   return (
     <Button
       size="lg"

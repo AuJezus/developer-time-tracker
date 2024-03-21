@@ -1,16 +1,30 @@
-import ButtonStartCode from "@/components/ButtonStartCode";
 import GithubActivity from "@/components/GithubActivity";
 import LogTimer from "@/components/LogTimer";
-import { Button } from "@/components/ui/Button";
-import { getCurrentLog, getLogPauseEvents, pauseLog } from "@/lib/actions/logs";
+import { getActiveLog, getLogPauseEvents } from "@/lib/actions/logs";
 import CatImage from "@/public/cat-nails.gif";
 import Image from "next/image";
-import { BiCircle } from "react-icons/bi";
 import * as dayjs from "dayjs";
-import { calculateTimespan } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/dist/server/api-utils";
+import calculateTimespan from "@/lib/helpers/calculateTimespan";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 
 async function WorkPage() {
-  const currentLog = await getCurrentLog();
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/");
+
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({ queryKey: ["log"] });
+
+  const currentLog = await getActiveLog(user.id);
   const pauseEvents = await getLogPauseEvents(currentLog.id);
   const initialDuration = calculateTimespan(currentLog, pauseEvents);
 
@@ -27,21 +41,24 @@ async function WorkPage() {
     );
 
   return (
-    <main className="max-w-[1000px] mx-auto pt-12 w-full">
-      <div className="mb-6 border-b-2 pb-6">
-        <p className="text-center mb-2">
-          {dayjs(currentLog.start).format("YYYY MMM D, ddd HH:mm")}
-        </p>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <main className="max-w-[1000px] mx-auto pt-12 w-full">
+        <div className="mb-6 border-b-2 pb-6">
+          <p className="text-center mb-2">
+            {dayjs(currentLog.start).format("YYYY MMM D, ddd HH:mm")}
+          </p>
 
-        <LogTimer
-          initialLog={currentLog}
-          initialPauseEvents={pauseEvents}
-          initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
-        />
-      </div>
+          <LogTimer
+            initialLog={currentLog}
+            initialPauseEvents={pauseEvents}
+            initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
+            userId={user.id}
+          />
+        </div>
 
-      <GithubActivity log={currentLog} />
-    </main>
+        <GithubActivity log={currentLog} />
+      </main>
+    </HydrationBoundary>
   );
 }
 

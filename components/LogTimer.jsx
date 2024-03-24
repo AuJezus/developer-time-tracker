@@ -13,17 +13,16 @@ import useEndMutation from "@/lib/mutations/useEndMutation";
 import calculateTimespan from "@/lib/helpers/calculateTimespan";
 dayjs.extend(duration);
 
-function LogTimer({ initialLog, initialPauseEvents, initialDuration }) {
+function LogTimer({ initialDuration }) {
   const { data: log, errorLog } = useQuery({
-    queryKey: ["log", initialLog.id],
+    queryKey: ["log", "active"],
     queryFn: getActiveLog,
-    initialData: initialLog,
   });
 
   const { data: pauseEvents, errorPauseEvents } = useQuery({
-    queryKey: ["log", "pauseEvents", initialLog.id],
-    queryFn: () => getLogPauseEvents(initialLog.id),
-    initialData: initialPauseEvents,
+    queryKey: ["log", "pauseEvents", log.id],
+    queryFn: () => getLogPauseEvents(log.id),
+    disabled: !!log,
   });
 
   const pauseMutation = usePauseMutation();

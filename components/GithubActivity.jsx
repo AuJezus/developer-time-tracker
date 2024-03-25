@@ -17,6 +17,8 @@ function GithubActivity({ log }) {
     queryKey: ["log", "repoStats", log.id],
     queryFn: () => getAllEventStats(events),
     enabled: !!events,
+    refetchInterval: 1000 * 30,
+    refetchIntervalInBackground: true,
   });
 
   return (

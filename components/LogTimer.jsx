@@ -22,7 +22,7 @@ function LogTimer({ initialDuration }) {
   const { data: pauseEvents, errorPauseEvents } = useQuery({
     queryKey: ["log", "pauseEvents", log.id],
     queryFn: () => getLogPauseEvents(log.id),
-    disabled: !!log,
+    enabled: !!log?.id,
   });
 
   const pauseMutation = usePauseMutation();

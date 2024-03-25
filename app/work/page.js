@@ -10,6 +10,7 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
+import { getAllEventStats, getRepoEvents } from "@/lib/actions/github";
 
 async function WorkPage() {
   const queryClient = new QueryClient();
@@ -25,7 +26,16 @@ async function WorkPage() {
   });
 
   const initialDuration = calculateTimespan(log, pauseEvents);
-  console.log(log, pauseEvents);
+
+  const repoEvents = await queryClient.fetchQuery({
+    queryKey: ["log", "repoEvents", log.id],
+    queryFn: () => getRepoEvents("developer-time-tracker", new Date(log.start)),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["log", "repoStats", log.id],
+    queryFn: () => getAllEventStats(repoEvents),
+  });
 
   if (!log)
     return (

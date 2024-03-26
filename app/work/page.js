@@ -10,7 +10,8 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import { getAllEventStats, getRepoEvents } from "@/lib/actions/github";
+import { getRepoActivity } from "@/lib/actions/github";
+import { getProject } from "@/lib/actions/projects";
 
 async function WorkPage() {
   const queryClient = new QueryClient();
@@ -27,14 +28,14 @@ async function WorkPage() {
 
   const initialDuration = calculateTimespan(log, pauseEvents);
 
-  const repoEvents = await queryClient.fetchQuery({
-    queryKey: ["log", "repoEvents", log.id],
-    queryFn: () => getRepoEvents("developer-time-tracker", new Date(log.start)),
+  const project = await queryClient.fetchQuery({
+    queryKey: ["project", log.project_id],
+    queryFn: () => getProject(log.project_id),
   });
 
-  await queryClient.prefetchQuery({
-    queryKey: ["log", "repoStats", log.id],
-    queryFn: () => getAllEventStats(repoEvents),
+  const activity = await queryClient.fetchQuery({
+    queryKey: ["log", "activity", log.id],
+    queryFn: () => getRepoActivity(project.github_repo_id, log.start, log.end),
   });
 
   if (!log)

@@ -3,7 +3,7 @@ import * as dayjs from "dayjs";
 
 const eventNames = { PushEvent: "Push" };
 
-function GithubEvent({ event, stats }) {
+function GithubEvent({ event }) {
   return (
     <div className="border-2 text-sm text-muted-foreground hover:text-primary-foreground group p-4 rounded-lg hover:border-primary transition-all hover:scale-105">
       <p className="text-lg mb-3 text-primary-foreground">
@@ -22,10 +22,10 @@ function GithubEvent({ event, stats }) {
           <BiLogoGithub /> {event.repo.name.split("/")[1]}
         </a>
         <p className="text-green-800 group-hover:text-green-500 transition-colors">
-          ++ {stats.additions}
+          ++ {event.stats.additions}
         </p>
         <p className="text-red-800 group-hover:text-red-500 transition-colors">
-          -- {stats.deletions}
+          -- {event.stats.deletions}
         </p>
       </div>
 
@@ -52,16 +52,12 @@ function GithubEvent({ event, stats }) {
   );
 }
 
-function GithubEventList({ events, repoStats }) {
+function GithubEventList({ events }) {
   return (
     <div className="grid grid-cols-3 gap-6">
-      {events.map((event) => {
-        const eventStats = repoStats.events.find(
-          (statEvent) => statEvent.id === event.id
-        ).totalStats;
-
-        return <GithubEvent key={event.id} event={event} stats={eventStats} />;
-      })}
+      {events.map((event) => (
+        <GithubEvent key={event.id} event={event} />
+      ))}
     </div>
   );
 }

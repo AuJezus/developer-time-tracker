@@ -16,7 +16,7 @@ function ReactQueryProvider({ children }) {
         queryCache: new QueryCache({
           onError: (error, query) => {
             if (!query.state.data) {
-              toast.error(`Something went wrong: ${error.message}`);
+              toast.error(`Something went wrong: ${error?.message || error}`);
             }
           },
         }),

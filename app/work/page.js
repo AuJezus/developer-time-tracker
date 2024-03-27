@@ -18,8 +18,20 @@ async function WorkPage() {
 
   const log = await queryClient.fetchQuery({
     queryKey: ["log", "active"],
-    queryFn: getActiveLog,
+    queryFn: () => getActiveLog(),
   });
+
+  if (!log)
+    return (
+      <main className="max-w-[1000px] mx-auto flex items-center flex-col gap-6 flex-auto justify-center">
+        <h1 className="text-4xl">No log started!</h1>
+        <p className="max-w-lg text-center">
+          You haven&apos;t started any logs! Use the button inside navigation
+          bar to start tracking your time.
+        </p>
+        <Image src={CatImage} alt="Cat filing his nails" />
+      </main>
+    );
 
   const pauseEvents = await queryClient.fetchQuery({
     queryKey: ["log", "pauseEvents", log.id],
@@ -37,18 +49,6 @@ async function WorkPage() {
     queryKey: ["log", "activity", log.id],
     queryFn: () => getRepoActivity(project.github_repo_id, log.start, log.end),
   });
-
-  if (!log)
-    return (
-      <main className="max-w-[1000px] mx-auto flex items-center flex-col gap-6 flex-auto justify-center">
-        <h1 className="text-4xl">No log started!</h1>
-        <p className="max-w-lg text-center">
-          You haven&apos;t started any logs! Use the button inside navigation
-          bar to start tracking your time.
-        </p>
-        <Image src={CatImage} alt="Cat filing his nails" />
-      </main>
-    );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

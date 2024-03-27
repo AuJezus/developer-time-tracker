@@ -5,6 +5,12 @@ import { Toaster } from "sonner";
 import { createClient } from "@/lib/supabase/server";
 import TopNav from "@/components/navigation/TopNav";
 import ReactQueryProvider from "@/components/helpers/ReactQueryProvider";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import { getActiveLog } from "@/lib/actions/logs";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -22,6 +28,13 @@ export default async function RootLayout({ children }) {
 
   if (error) console.error(error);
 
+  const queryClient = new QueryClient();
+
+  const log = await queryClient.fetchQuery({
+    queryKey: ["log", "active"],
+    queryFn: () => getActiveLog(),
+  });
+
   return (
     <html lang="en">
       <body
@@ -34,7 +47,9 @@ export default async function RootLayout({ children }) {
           {/* <NavWrapper>{children}</NavWrapper> */}
 
           <div className="flex flex-col min-h-screen">
-            <TopNav user={user} />
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <TopNav user={user} />
+            </HydrationBoundary>
             {children}
           </div>
 

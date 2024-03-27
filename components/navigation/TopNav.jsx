@@ -1,77 +1,21 @@
 "use client";
 
 import useScrollUp from "@/lib/helpers/useScrollUp";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import ButtonGithub from "../ButtonGithub";
-import { BiCircle, BiTerminal, BiTime, BiUser, BiWrench } from "react-icons/bi";
-import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuContent,
-  NavigationMenuLink,
-  NavigationMenuTrigger,
-} from "../ui/NavigationMenu";
+import { BiCircle } from "react-icons/bi";
 import ButtonStartCode from "../ButtonStartCode";
-
-export function TopNavUser({ user }) {
-  return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            <Link href="/profile" className="flex items-center gap-2 group">
-              <BiUser />
-              <p>{user.user_metadata.user_name}</p>
-              <Avatar className="border-2 group-hover:border-transparent transition-colors">
-                <AvatarImage src={user.user_metadata.avatar_url} />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </Link>
-          </NavigationMenuTrigger>
-          <NavigationMenuContent asChild>
-            <ul className="flex xl:w-[200px] flex-col p-2 divide-y-2 text-sm">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href={"/profile"}
-                    className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
-                  >
-                    <BiUser /> Profile
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href={"/settings"}
-                    className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
-                  >
-                    <BiWrench /> Settings
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href={"/projects"}
-                    className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
-                  >
-                    <BiTerminal /> My Projects
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
-  );
-}
+import { useQuery } from "@tanstack/react-query";
+import { getActiveLog } from "@/lib/actions/logs";
+import TopNavUser from "./TopNavUser";
+import Link from "next/link";
 
 function TopNav({ user }) {
   const isScrollUp = useScrollUp();
+
+  const { data: log, errorLog } = useQuery({
+    queryKey: ["log", "active"],
+    queryFn: () => getActiveLog(),
+  });
 
   return (
     <div
@@ -86,7 +30,8 @@ function TopNav({ user }) {
       </div>
       {user && (
         <>
-          <ButtonStartCode userId={user.id} />
+          {log && <Link href="/work">In progress</Link>}
+          {!log && <ButtonStartCode userId={user.id} />}
           <TopNavUser user={user} />
         </>
       )}

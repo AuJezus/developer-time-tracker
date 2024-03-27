@@ -16,11 +16,11 @@ dayjs.extend(duration);
 function LogTimer({ initialDuration }) {
   const { data: log, errorLog } = useQuery({
     queryKey: ["log", "active"],
-    queryFn: getActiveLog,
+    queryFn: () => getActiveLog(),
   });
 
   const { data: pauseEvents, errorPauseEvents } = useQuery({
-    queryKey: ["log", "pauseEvents", log.id],
+    queryKey: ["log", "pauseEvents", log?.id],
     queryFn: () => getLogPauseEvents(log.id),
     enabled: !!log?.id,
   });
@@ -32,7 +32,7 @@ function LogTimer({ initialDuration }) {
   const [timeSpan, setTimeSpan] = useState(dayjs.duration(initialDuration));
 
   useEffect(() => {
-    if (log.is_paused || log.end) return;
+    if (log?.is_paused || log?.end) return;
 
     const interval = setInterval(
       () => setTimeSpan(calculateTimespan(log, pauseEvents)),
@@ -42,6 +42,8 @@ function LogTimer({ initialDuration }) {
     return () => clearInterval(interval);
   }, [log, pauseEvents]);
 
+  if (!log) return <p>Loading...</p>;
+
   return (
     <div>
       <div className="flex items-center gap-4 mb-6 justify-center">
@@ -50,7 +52,9 @@ function LogTimer({ initialDuration }) {
             log.is_paused ? "text-yellow-500" : "text-green-500"
           } text-3xl`}
         />
-        <div className="text-7xl">{timeSpan.format("HH:mm:ss")}</div>
+        <div className="text-7xl">{`${Math.floor(
+          timeSpan.asHours()
+        )}:${timeSpan.format("mm:ss")}`}</div>
       </div>
 
       <div className="flex gap-6 justify-center">

@@ -52,9 +52,9 @@ function LogTimer({ initialDuration }) {
             log.is_paused ? "text-yellow-500" : "text-green-500"
           } text-3xl`}
         />
-        <div className="text-7xl">{`${(
-          "0" + Math.floor(timeSpan.asHours())
-        ).slice(-2)}:${timeSpan.format("mm:ss")}`}</div>
+        <div className="text-7xl">{`${String(
+          Math.floor(timeSpan.asHours())
+        ).padStart(2, "0")}:${timeSpan.format("mm:ss")}`}</div>
       </div>
 
       <div className="flex gap-6 justify-center">

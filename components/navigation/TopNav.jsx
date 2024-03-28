@@ -2,17 +2,23 @@
 
 import useScrollUp from "@/lib/helpers/useScrollUp";
 import ButtonGithub from "../ButtonGithub";
-import { BiCircle } from "react-icons/bi";
+import { BiCircle, BiUser } from "react-icons/bi";
 import ButtonStartCode from "../ButtonStartCode";
 import { useQuery } from "@tanstack/react-query";
-import { getActiveLog } from "@/lib/actions/logs";
+import { getActiveLog, getActiveLogCount } from "@/lib/actions/logs";
 import TopNavUser from "./TopNavUser";
 import Link from "next/link";
+import { buttonVariants } from "../ui/Button";
 
 function TopNav({ user }) {
   const isScrollUp = useScrollUp();
 
-  const { data: log, errorLog } = useQuery({
+  const { data: count, error: errorCount } = useQuery({
+    queryKey: ["logs", "active", "count"],
+    queryFn: () => getActiveLogCount(),
+  });
+
+  const { data: log, error: errorLog } = useQuery({
     queryKey: ["log", "active"],
     queryFn: () => getActiveLog(),
   });
@@ -25,12 +31,20 @@ function TopNav({ user }) {
     >
       <p className="text-2xl font-bold">dev-tracker</p>
       <div className="flex items-center text-sm gap-1">
-        <p>coding: 23</p>
-        <BiCircle className="text-green-500" />
+        <p>active: {count}</p>
+        <BiUser />
       </div>
       {user && (
         <>
-          {log && <Link href="/work">In progress</Link>}
+          {log && (
+            <Link
+              href="/work"
+              className={`${buttonVariants({ variant: "secondary" })} gap-2`}
+            >
+              <BiCircle className="text-green-500" />
+              In progress
+            </Link>
+          )}
           {!log && <ButtonStartCode userId={user.id} />}
           <TopNavUser user={user} />
         </>

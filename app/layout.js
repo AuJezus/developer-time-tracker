@@ -10,7 +10,7 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import { getActiveLog } from "@/lib/actions/logs";
+import { getActiveLog, getActiveLogCount } from "@/lib/actions/logs";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -30,7 +30,12 @@ export default async function RootLayout({ children }) {
 
   const queryClient = new QueryClient();
 
-  const log = await queryClient.fetchQuery({
+  const logCount = await queryClient.fetchQuery({
+    queryKey: ["logs", "active", "count"],
+    queryFn: () => getActiveLogCount(),
+  });
+
+  const activeLog = await queryClient.fetchQuery({
     queryKey: ["log", "active"],
     queryFn: () => getActiveLog(),
   });

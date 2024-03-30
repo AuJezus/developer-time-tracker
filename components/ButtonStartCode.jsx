@@ -15,14 +15,26 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import { startLog } from "@/lib/actions/logs";
+import Link from "next/link";
+import { useFormStatus } from "react-dom";
+
+function FormButton({ children }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button disabled={pending} type="submit">
+      {pending ? "Creating" : children}
+    </Button>
+  );
+}
 
 function ButtonStartCode({ userId }) {
   const [open, setOpen] = useState(false);
 
   const { data: projects } = useQuery({
-    queryKey: ["projects/user", userId],
+    queryKey: ["projects"],
     queryFn: () => getUserProjects(userId),
-    enabled: userId && open,
+    enabled: !!userId,
   });
 
   return (
@@ -32,28 +44,36 @@ function ButtonStartCode({ userId }) {
       >
         Start Coding <BiTime className="text-lg" />
       </PopoverTrigger>
-      <PopoverContent>
-        <form action={startLog} className="flex gap-2">
-          {!projects && <p>Loading...</p>}
-          {projects && (
-            <>
-              <Select name="project_id">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Project" />
-                </SelectTrigger>
-                <SelectContent>
-                  {projects.map((project) => (
-                    <SelectItem key={project.id} value={project.id.toString()}>
-                      {project.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      <PopoverContent className="w-fit">
+        {!projects && (
+          <p className="text-nowrap text-sm">
+            <span>Start by creating a </span>
+            <Link
+              className="underline decoration-primary text-primary text-base"
+              href="/projects/new"
+            >
+              project!
+            </Link>
+          </p>
+        )}
+        {projects && (
+          <form action={startLog} className="flex gap-2">
+            <Select name="project_id" required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Project" />
+              </SelectTrigger>
+              <SelectContent>
+                {projects.map((project) => (
+                  <SelectItem key={project.id} value={project.id.toString()}>
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-              <Button type="submit">Start!</Button>
-            </>
-          )}
-        </form>
+            <FormButton>Start!</FormButton>
+          </form>
+        )}
       </PopoverContent>
     </Popover>
   );

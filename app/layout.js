@@ -11,6 +11,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getActiveLog, getActiveLogCount } from "@/lib/actions/logs";
+import { getUserProjects } from "@/lib/actions/projects";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -40,6 +41,11 @@ export default async function RootLayout({ children }) {
     queryFn: () => getActiveLog(),
   });
 
+  const projects = await queryClient.fetchQuery({
+    queryKey: ["projects"],
+    queryFn: () => getUserProjects(user.id),
+  });
+
   return (
     <html lang="en">
       <body
@@ -54,8 +60,8 @@ export default async function RootLayout({ children }) {
           <div className="flex flex-col min-h-screen">
             <HydrationBoundary state={dehydrate(queryClient)}>
               <TopNav user={user} />
+              {children}
             </HydrationBoundary>
-            {children}
           </div>
 
           <Toaster richColors theme="dark" />

@@ -31,7 +31,7 @@ function TopNav({ user }) {
     >
       <p className="text-2xl font-bold">dev-tracker</p>
       <div className="flex items-center text-sm gap-1">
-        <p>active: {count}</p>
+        <p>coding: {count}</p>
         <BiUser />
       </div>
       {user && (

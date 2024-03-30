@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
-import { createNewLog, startLog } from "@/lib/actions/logs";
+import { startLog } from "@/lib/actions/logs";
 
 function ButtonStartCode({ userId }) {
   const [open, setOpen] = useState(false);

@@ -12,6 +12,8 @@ import {
 } from "@tanstack/react-query";
 import { getRepoActivity } from "@/lib/actions/github";
 import { getProject } from "@/lib/actions/projects";
+import Quote from "@/components/Quote";
+import { getRandomQuote } from "@/lib/actions/quotes";
 
 async function WorkPage() {
   const queryClient = new QueryClient();
@@ -50,20 +52,33 @@ async function WorkPage() {
     queryFn: () => getRepoActivity(project.github_repo_id, log.start, log.end),
   });
 
+  const quote = await queryClient.fetchQuery({
+    queryKey: ["quote"],
+    queryFn: () => getRandomQuote(),
+  });
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <main className="max-w-[1000px] mx-auto pt-12 w-full">
-        <div className="mb-6 border-b-2 pb-6">
-          <p className="text-center mb-2">
-            {dayjs(log.start).format("YYYY MMM D, ddd HH:mm")}
-          </p>
+      <main className="max-w-[1000px] mx-auto w-full">
+        <div className="mb-6 divide-y">
+          <div className="pb-6 pt-12">
+            <p className="text-center mb-2">
+              {dayjs(log.start).format("YYYY MMM D, ddd HH:mm")}
+            </p>
 
-          <LogTimer
-            initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
-          />
+            <LogTimer
+              initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
+            />
+          </div>
+
+          <div className="py-6">
+            <Quote />
+          </div>
+
+          <div className="py-6">
+            <GithubActivity log={log} />
+          </div>
         </div>
-
-        <GithubActivity log={log} />
       </main>
     </HydrationBoundary>
   );

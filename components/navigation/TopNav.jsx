@@ -36,7 +36,7 @@ function TopNav({ user }) {
       </div>
       {user && (
         <>
-          {log && (
+          {log && !log.end && (
             <Link
               href="/work"
               className={`${buttonVariants({ variant: "secondary" })} gap-2`}
@@ -45,7 +45,7 @@ function TopNav({ user }) {
               In progress
             </Link>
           )}
-          {!log && <ButtonStartCode userId={user.id} />}
+          {(!log || log?.end) && <ButtonStartCode />}
           <TopNavUser user={user} />
         </>
       )}

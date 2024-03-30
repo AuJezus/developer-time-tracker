@@ -28,13 +28,12 @@ function FormButton({ children }) {
   );
 }
 
-function ButtonStartCode({ userId }) {
+function ButtonStartCode() {
   const [open, setOpen] = useState(false);
 
   const { data: projects } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => getUserProjects(userId),
-    enabled: !!userId,
+    queryFn: () => getUserProjects(),
   });
 
   return (

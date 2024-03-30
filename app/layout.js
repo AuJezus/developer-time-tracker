@@ -36,15 +36,17 @@ export default async function RootLayout({ children }) {
     queryFn: () => getActiveLogCount(),
   });
 
-  const activeLog = await queryClient.fetchQuery({
-    queryKey: ["log", "active"],
-    queryFn: () => getActiveLog(),
-  });
+  if (user) {
+    const activeLog = await queryClient.fetchQuery({
+      queryKey: ["log", "active"],
+      queryFn: () => getActiveLog(),
+    });
 
-  const projects = await queryClient.fetchQuery({
-    queryKey: ["projects"],
-    queryFn: () => getUserProjects(user.id),
-  });
+    const projects = await queryClient.fetchQuery({
+      queryKey: ["projects"],
+      queryFn: () => getUserProjects(),
+    });
+  }
 
   return (
     <html lang="en">

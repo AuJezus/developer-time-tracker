@@ -10,6 +10,7 @@ function Quote() {
     queryFn: () => getRandomQuote(),
     refetchInterval: 1000 * 20,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     refetchIntervalInBackground: false,
     staleTime: 1000 * 20,
   });

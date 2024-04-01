@@ -101,7 +101,7 @@ const logs = [
   { date: "2024-04-17 08:35", time: 240, tasksDone: 4, commits: 0 },
 ];
 
-async function ProfilePage({ id }) {
+async function ProfilePage({ params: { id } }) {
   const supabase = createClient();
   const {
     data: { user },

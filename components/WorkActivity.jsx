@@ -2,11 +2,11 @@
 
 import { getRepoActivity } from "@/lib/actions/github";
 import { useQuery } from "@tanstack/react-query";
-import { BiLogoGithub } from "react-icons/bi";
-import GithubEventList from "./GithubEventList";
+import ActivityEventList from "./ActivityEventList";
 import { getActiveLog } from "@/lib/actions/logs";
+import ActivitySummarry from "./ActivitySummarry";
 
-function GithubActivity() {
+function WorkActivity() {
   const { data: log, errorLog } = useQuery({
     queryKey: ["log", "active"],
     queryFn: () => getActiveLog(),
@@ -29,26 +29,18 @@ function GithubActivity() {
   if (!activity) return <p>Loading...</p>;
 
   return (
-    <div className="w-full">
+    <div>
       <p className="text-xl mb-6">Github activity</p>
 
-      <div className="text-sm flex gap-6 mb-4">
-        <div className="text-green-500 border-2 py-1 px-2 rounded-md hover:bg-secondary">
-          ++ {activity.stats ? activity.stats.additions : 0}
-        </div>
-        <div className="text-red-500 border-2 py-1 px-2 rounded-md hover:bg-secondary">
-          -- {activity.stats ? activity.stats.deletions : 0}
-        </div>
-        <div className="border-2 py-1 px-2 rounded-md flex items-center gap-2 hover:bg-secondary">
-          <BiLogoGithub /> {activity.events.length}
-        </div>
+      <div className="mb-4">
+        <ActivitySummarry activity={activity} />
       </div>
 
       {!activity.events.length && <p>Nothing on github yet</p>}
 
-      {activity.events && <GithubEventList events={activity.events} />}
+      {activity.events && <ActivityEventList events={activity.events} />}
     </div>
   );
 }
 
-export default GithubActivity;
+export default WorkActivity;

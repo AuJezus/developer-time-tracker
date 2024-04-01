@@ -3,7 +3,7 @@ import * as dayjs from "dayjs";
 
 const eventNames = { PushEvent: "Push" };
 
-function GithubEvent({ event }) {
+function ActivityEvent({ event }) {
   return (
     <div className="border-2 text-sm text-muted-foreground hover:text-primary-foreground group p-4 rounded-lg hover:border-primary transition-all hover:scale-105">
       <p className="text-lg mb-3 text-primary-foreground">
@@ -52,14 +52,14 @@ function GithubEvent({ event }) {
   );
 }
 
-function GithubEventList({ events }) {
+function ActivityEventList({ events }) {
   return (
     <div className="grid grid-cols-3 gap-6">
       {events.map((event) => (
-        <GithubEvent key={event.id} event={event} />
+        <ActivityEvent key={event.id} event={event} />
       ))}
     </div>
   );
 }
 
-export default GithubEventList;
+export default ActivityEventList;

@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react";
 import * as duration from "dayjs/plugin/duration";
 import * as dayjs from "dayjs";
-import { BiCircle } from "react-icons/bi";
 import { Button } from "./ui/Button";
 import { getActiveLog, getLogPauseEvents } from "@/lib/actions/logs";
 import { useQuery } from "@tanstack/react-query";
 import usePauseMutation from "@/lib/mutations/usePauseMutation";
 import useResumeMutation from "@/lib/mutations/useResumeMutation";
 import useEndMutation from "@/lib/mutations/useEndMutation";
-import calculateTimespan from "@/lib/helpers/calculateTimespan";
+import calculateDuration from "@/lib/helpers/calculateDuration";
+import Timer from "./Timer";
 dayjs.extend(duration);
 
-function LogTimer({ initialDuration }) {
+function WorkTimer({ initialDuration }) {
   const { data: log, errorLog } = useQuery({
     queryKey: ["log", "active"],
     queryFn: () => getActiveLog(),
@@ -29,13 +29,19 @@ function LogTimer({ initialDuration }) {
   const resumeMutation = useResumeMutation();
   const endMutation = useEndMutation();
 
-  const [timeSpan, setTimeSpan] = useState(dayjs.duration(initialDuration));
+  const isPending =
+    pauseMutation.isPending ||
+    resumeMutation.isPending ||
+    endMutation.isPending ||
+    !!log?.end;
+
+  const [duration, setDuration] = useState(dayjs.duration(initialDuration));
 
   useEffect(() => {
     if (log?.is_paused || log?.end) return;
 
     const interval = setInterval(
-      () => setTimeSpan(calculateTimespan(log, pauseEvents)),
+      () => setDuration(calculateDuration(log, pauseEvents)),
       1000
     );
 
@@ -46,16 +52,7 @@ function LogTimer({ initialDuration }) {
 
   return (
     <div>
-      <div className="flex items-center gap-4 mb-6 justify-center">
-        <BiCircle
-          className={`${log.end ? "!text-red-500" : ""} ${
-            log.is_paused ? "text-yellow-500" : "text-green-500"
-          } text-3xl`}
-        />
-        <div className="text-7xl">{`${String(
-          Math.floor(timeSpan.asHours())
-        ).padStart(2, "0")}:${timeSpan.format("mm:ss")}`}</div>
-      </div>
+      <Timer log={log} duration={duration} />
 
       <div className="flex gap-6 justify-center">
         {!log.is_paused && (
@@ -66,6 +63,7 @@ function LogTimer({ initialDuration }) {
                 time: dayjs().toISOString(),
               })
             }
+            disabled={isPending}
             variant="outline"
           >
             Pause
@@ -79,6 +77,7 @@ function LogTimer({ initialDuration }) {
                 time: dayjs().toISOString(),
               })
             }
+            disabled={isPending}
             variant="outline"
           >
             Resume
@@ -91,6 +90,7 @@ function LogTimer({ initialDuration }) {
               time: dayjs().toISOString(),
             })
           }
+          disabled={isPending}
           variant="destructive"
         >
           End
@@ -100,4 +100,4 @@ function LogTimer({ initialDuration }) {
   );
 }
 
-export default LogTimer;
+export default WorkTimer;

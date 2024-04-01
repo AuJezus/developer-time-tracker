@@ -1,10 +1,10 @@
-import GithubActivity from "@/components/GithubActivity";
-import LogTimer from "@/components/LogTimer";
+import WorkActivity from "@/components/WorkActivity";
+import WorkTimer from "@/components/WorkTimer";
 import { getActiveLog, getLogPauseEvents } from "@/lib/actions/logs";
 import CatImage from "@/public/cat-nails.gif";
 import Image from "next/image";
 import * as dayjs from "dayjs";
-import calculateTimespan from "@/lib/helpers/calculateTimespan";
+import calculateDuration from "@/lib/helpers/calculateDuration";
 import {
   HydrationBoundary,
   QueryClient,
@@ -40,7 +40,7 @@ async function WorkPage() {
     queryFn: () => getLogPauseEvents(log.id),
   });
 
-  const initialDuration = calculateTimespan(log, pauseEvents);
+  const initialDuration = calculateDuration(log, pauseEvents);
 
   const project = await queryClient.fetchQuery({
     queryKey: ["project", log.project_id],
@@ -66,7 +66,7 @@ async function WorkPage() {
               {dayjs(log.start).format("YYYY MMM D, ddd HH:mm")}
             </p>
 
-            <LogTimer
+            <WorkTimer
               initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
             />
           </div>
@@ -76,7 +76,7 @@ async function WorkPage() {
           </div>
 
           <div className="py-6">
-            <GithubActivity log={log} />
+            <WorkActivity log={log} />
           </div>
         </div>
       </main>

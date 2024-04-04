@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@octokit/core": "^6.0.1",
+    "@octokit/oauth-methods": "^5.0.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-popover": "^1.0.7",

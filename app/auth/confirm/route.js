@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+export const PROVIDER_REFRESH_INTERVAL = 8 * 60 * 60;
+
 // Creating a handler to a GET request to route /auth/confirm
 // We will use PKCE (Proof Key for Code Exchange)
 // This will work by getting a special key when user is verified and
@@ -40,10 +42,25 @@ export async function GET(request) {
   // Handle OAuth
   if (code) {
     const supabase = createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { error, data } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       redirectTo.searchParams.delete("next");
-      return NextResponse.redirect(redirectTo);
+
+      // Update provider info
+      const { user, provider_token, provider_refresh_token } = data.session;
+      const provider_expires_at =
+        data.session.expires_at -
+        data.session.expires_in +
+        PROVIDER_REFRESH_INTERVAL;
+
+      const { error: errorProvider } = await supabase
+        .from("users")
+        .update({ provider_token, provider_refresh_token, provider_expires_at })
+        .eq("id", user.id);
+
+      if (!errorProvider) {
+        return NextResponse.redirect(redirectTo);
+      }
     }
   }
 

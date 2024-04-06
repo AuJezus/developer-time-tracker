@@ -8,15 +8,10 @@ import {
 } from "@/components/ui/Select";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
-import { getAuthUserRepos } from "@/lib/github/repositories";
-import { createClient } from "@/lib/supabase/server";
+import { getUserRepos } from "@/lib/actions/github";
 
 async function NewProjectPage() {
-  const supabase = createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const repos = await getAuthUserRepos(session.provider_token);
+  const repos = await getUserRepos();
 
   return (
     <main className="mt-12 max-w-[1000px] mx-auto">

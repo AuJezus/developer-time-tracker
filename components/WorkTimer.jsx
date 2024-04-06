@@ -5,7 +5,7 @@ import * as duration from "dayjs/plugin/duration";
 import * as dayjs from "dayjs";
 import { Button } from "./ui/Button";
 import { getActiveLog, getLogPauseEvents } from "@/lib/actions/logs";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import usePauseMutation from "@/lib/mutations/usePauseMutation";
 import useResumeMutation from "@/lib/mutations/useResumeMutation";
 import useEndMutation from "@/lib/mutations/useEndMutation";
@@ -14,6 +14,8 @@ import Timer from "./Timer";
 dayjs.extend(duration);
 
 function WorkTimer({ initialDuration }) {
+  const queryClient = useQueryClient();
+
   const { data: log, errorLog } = useQuery({
     queryKey: ["log", "active"],
     queryFn: () => getActiveLog(),
@@ -36,6 +38,11 @@ function WorkTimer({ initialDuration }) {
     !!log?.end;
 
   const [duration, setDuration] = useState(dayjs.duration(initialDuration));
+
+  function calculateCommits() {
+    const activity = queryClient.getQueryData([["log", "activity", log?.id]]);
+    return activity?.events?.length || 0;
+  }
 
   useEffect(() => {
     if (log?.is_paused || log?.end) return;
@@ -88,6 +95,8 @@ function WorkTimer({ initialDuration }) {
             endMutation.mutate({
               logId: log.id,
               time: dayjs().toISOString(),
+              duration: Math.floor(duration.asSeconds()),
+              commits: calculateCommits(),
             })
           }
           disabled={isPending}

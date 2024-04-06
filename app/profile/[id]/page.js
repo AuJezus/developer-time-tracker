@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { getAllLogs } from "@/lib/actions/logs";
 import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
-import Link from "next/link";
 import {
   BiBeenHere,
   BiBriefcase,
@@ -14,6 +14,9 @@ import {
   BiTaskX,
   BiTime,
 } from "react-icons/bi";
+import * as dayjs from "dayjs";
+import * as duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 const projects = [
   "developer-time-tracker",
@@ -107,6 +110,22 @@ async function ProfilePage({ params: { id } }) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const logss = await getAllLogs();
+
+  const stats = logss.reduce(
+    (acc, log) => {
+      acc.seconds += log.duration;
+      acc.commits += log.commits;
+      return acc;
+    },
+    {
+      seconds: 0,
+      commits: 0,
+    }
+  );
+
+  const totalDuration = dayjs.duration(stats.seconds, "s");
+
   return (
     <main className="pt-8 mb-12 max-w-[1200px] mx-auto">
       <div className="flex border-b-2 p-6 justify-around mb-8">
@@ -167,21 +186,24 @@ async function ProfilePage({ params: { id } }) {
         <div>
           <p className="mb-4 text-sm">Total time logged:</p>
           <p className="flex items-center gap-3 ml-4 text-xl">
-            <BiTime className="text-green-500" /> 135hr 46min
+            <BiTime className="text-green-500" />{" "}
+            {`${Math.floor(totalDuration.asHours())}hr ${totalDuration.format(
+              "mm"
+            )}min`}
           </p>
         </div>
 
         <div>
-          <p className="mb-4 text-sm">Total tasks completed:</p>
+          <p className="mb-4 text-sm">Total logs:</p>
           <p className="flex items-center gap-3 ml-4 text-xl">
-            <BiTask className="text-green-500" /> 35 tasks
+            <BiTask className="text-green-500" /> {logss.length} logs
           </p>
         </div>
 
         <div>
           <p className="mb-4 text-sm">Github commits logged:</p>
           <p className="flex items-center gap-3 ml-4 text-xl">
-            <BiLogoGithub className="text-green-500" /> 35 commits
+            <BiLogoGithub className="text-green-500" /> {stats.commits} commits
           </p>
         </div>
       </div>
@@ -191,15 +213,12 @@ async function ProfilePage({ params: { id } }) {
           <TabsTrigger value="projects" className="flex gap-2 items-center">
             <BiCabinet /> Projects
           </TabsTrigger>
-          <TabsTrigger value="tasks" className="flex gap-2 items-center">
-            <BiTask />
-            Tasks
-          </TabsTrigger>
           <TabsTrigger value="logs" className="flex gap-2 items-center">
             <BiTime />
             Logs
           </TabsTrigger>
         </TabsList>
+
         <TabsContent value="projects" asChild>
           <div className="grid grid-cols-3 gap-6">
             {projects.map((project) => (
@@ -238,56 +257,6 @@ async function ProfilePage({ params: { id } }) {
                 </div>
               </div>
             ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent
-          value="tasks"
-          className="flex justify-between gap-8 items-start"
-        >
-          <div className="border-2 p-2">
-            <p className="text-xl mb-2">To-do</p>
-            <ul className="ml-4 flex flex-col gap-2">
-              {tasks.todo.map((todo) => (
-                <li
-                  key={todo}
-                  className="w-fit px-2 py-1 rounded-lg flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
-                >
-                  <BiTaskX />
-                  {todo}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="border-2 p-2">
-            <p className="text-xl mb-2 text-yellow-500">In progress</p>
-            <ul className="ml-4 flex flex-col gap-2">
-              {tasks.inProgress.map((todo) => (
-                <li
-                  key={todo}
-                  className="w-fit px-2 py-1 rounded-lg flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
-                >
-                  <BiTaskX />
-                  {todo}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="border-2 p-2">
-            <p className="text-xl mb-2 text-green-500">Done</p>
-            <ul className="ml-4 flex flex-col gap-2">
-              {tasks.done.map((todo) => (
-                <li
-                  key={todo}
-                  className="w-fit px-2 py-1 rounded-lg flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
-                >
-                  <BiTaskX />
-                  {todo}
-                </li>
-              ))}
-            </ul>
           </div>
         </TabsContent>
 

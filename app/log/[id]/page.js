@@ -1,21 +1,19 @@
 import Timer from "@/components/Timer";
-import { getLog, getLogPauseEvents } from "@/lib/actions/logs";
+import { getLog } from "@/lib/actions/logs";
 import { notFound } from "next/navigation";
 import ActivitySummarry from "@/components/ActivitySummarry";
 import ActivityEventList from "@/components/ActivityEventList";
-import calculateDuration from "@/lib/helpers/calculateDuration";
 import { getProject } from "@/lib/actions/projects";
 import { getRepoActivity } from "@/lib/actions/github";
 import * as dayjs from "dayjs";
 
 async function LogPage({ params: { id } }) {
+  // TODO: I can join log and project
   const log = await getLog(id);
 
   if (!log) notFound();
 
-  const pauseEvents = await getLogPauseEvents(id);
-
-  const duration = calculateDuration(log, pauseEvents);
+  const duration = dayjs.duration(log.duration, "s");
 
   const project = await getProject(log.project_id);
 

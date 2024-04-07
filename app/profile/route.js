@@ -10,5 +10,5 @@ export async function GET(request) {
   } = await supabase.auth.getUser();
   if (error) return NextResponse.redirect("/error");
 
-  return NextResponse.redirect(new URL(`profile/${user.id}`, request.url));
+  return NextResponse.redirect(new URL(request.url + `/${user.id}`));
 }

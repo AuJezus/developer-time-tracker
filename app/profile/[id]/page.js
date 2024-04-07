@@ -17,13 +17,11 @@ import * as duration from "dayjs/plugin/duration";
 import { getUserProjects } from "@/lib/actions/projects";
 import ProjectList from "@/components/ProjectList";
 import LogList from "@/components/LogList";
+import { getUser } from "@/lib/actions/user";
 dayjs.extend(duration);
 
 async function ProfilePage({ params: { id } }) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const logs = await getAllLogs();
   const projects = await getUserProjects();
@@ -49,15 +47,15 @@ async function ProfilePage({ params: { id } }) {
           <div className="relative w-24 h-24">
             <Image
               className="border-2"
-              src={user.user_metadata.avatar_url}
-              alt={`${user.user_metadata.user_name}'s avatar picture`}
+              src={user.avatar_url}
+              alt={`${user.username}'s avatar picture`}
               fill
             />
           </div>
           <div className="flex flex-col gap-3">
             <a href="https://github.com/AuJezus" className="flex gap-2">
               <h2 className="text-4xl font-semibold underline decoration-primary">
-                {user.user_metadata.user_name}
+                {user.username}
               </h2>
               <BiLogoGithub className="text-sm" />
             </a>

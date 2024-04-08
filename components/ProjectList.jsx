@@ -29,13 +29,14 @@ function Project({ project, logs }) {
       <p className="text-sm text-muted-foreground mb-2">
         {project.description.slice(0, 120) + "..."}
       </p>
-      <div className="flex justify-around h-full items-end text-sm text-muted-foreground group-hover:text-primary-foreground">
+      <div className="flex justify-around h-full items-end text-sm text-muted-foreground group-hover:text-primary-foreground transition-colors">
         <p className="flex items-center gap-1">
-          <BiTime />
+          <BiTime className="group-hover:text-yellow-500 transition-colors" />
           {`${Math.floor(duration.asHours())}hr ${duration.format("m")}min`}
         </p>
         <p className="flex items-center gap-1">
-          <BiLogoGithub /> {stats.commits}
+          <BiLogoGithub className="group-hover:text-neutral-300 transition-colors" />{" "}
+          {stats.commits}
         </p>
       </div>
     </div>

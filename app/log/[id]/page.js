@@ -6,6 +6,8 @@ import ActivityEventList from "@/components/ActivityEventList";
 import { getProject } from "@/lib/actions/projects";
 import { getRepoActivity } from "@/lib/actions/github";
 import * as dayjs from "dayjs";
+import * as duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 async function LogPage({ params: { id } }) {
   // TODO: I can join log and project

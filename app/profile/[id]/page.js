@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { getAllLogs } from "@/lib/actions/logs";
-import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import {
   BiBeenHere,
@@ -9,16 +8,14 @@ import {
   BiCodeAlt,
   BiEnvelope,
   BiLogoGithub,
-  BiTask,
   BiTime,
 } from "react-icons/bi";
-import * as dayjs from "dayjs";
-import * as duration from "dayjs/plugin/duration";
 import { getUserProjects } from "@/lib/actions/projects";
 import ProjectList from "@/components/ProjectList";
 import LogList from "@/components/LogList";
 import { getUser } from "@/lib/actions/user";
-dayjs.extend(duration);
+import Stats from "@/components/Stats";
+import calculateLogStats from "@/lib/helpers/calculateLogStats";
 
 async function ProfilePage({ params: { id } }) {
   const user = await getUser();
@@ -26,19 +23,7 @@ async function ProfilePage({ params: { id } }) {
   const logs = await getAllLogs();
   const projects = await getUserProjects();
 
-  const stats = logs.reduce(
-    (acc, log) => {
-      acc.seconds += log.duration;
-      acc.commits += log.commits;
-      return acc;
-    },
-    {
-      seconds: 0,
-      commits: 0,
-    }
-  );
-
-  const totalDuration = dayjs.duration(stats.seconds, "s");
+  const stats = calculateLogStats(logs);
 
   return (
     <main className="pt-8 mb-12 max-w-[1200px] mx-auto w-full">
@@ -96,30 +81,12 @@ async function ProfilePage({ params: { id } }) {
         </div>
       </div>
 
-      <div className="flex justify-around mb-10">
-        <div>
-          <p className="mb-4 text-sm">Total time logged:</p>
-          <p className="flex items-center gap-3 ml-4 text-xl">
-            <BiTime className="text-green-500" />{" "}
-            {`${Math.floor(totalDuration.asHours())}hr ${totalDuration.format(
-              "mm"
-            )}min`}
-          </p>
-        </div>
-
-        <div>
-          <p className="mb-4 text-sm">Total logs:</p>
-          <p className="flex items-center gap-3 ml-4 text-xl">
-            <BiTask className="text-green-500" /> {logs.length} logs
-          </p>
-        </div>
-
-        <div>
-          <p className="mb-4 text-sm">Github commits logged:</p>
-          <p className="flex items-center gap-3 ml-4 text-xl">
-            <BiLogoGithub className="text-green-500" /> {stats.commits} commits
-          </p>
-        </div>
+      <div className="mb-10">
+        <Stats
+          durationInSecs={stats.seconds}
+          logCount={logs.length}
+          commitCount={stats.commits}
+        />
       </div>
 
       <Tabs defaultValue="projects">

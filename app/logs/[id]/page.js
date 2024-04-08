@@ -7,10 +7,10 @@ import { getProject } from "@/lib/actions/projects";
 import { getRepoActivity } from "@/lib/actions/github";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
+import BackLink from "@/components/ui/BackLink";
 dayjs.extend(duration);
 
 async function LogPage({ params: { id } }) {
-  // TODO: I can join log and project
   const log = await getLog(id);
 
   if (!log) notFound();
@@ -26,9 +26,11 @@ async function LogPage({ params: { id } }) {
   );
 
   return (
-    <main className="max-w-[1000px] mx-auto w-full">
+    <main className="max-w-[1000px] mx-auto w-full relative mt-6">
+      <BackLink href="/logs">All logs</BackLink>
+
       <div className="mb-6 divide-y">
-        <div className="pb-6 pt-12">
+        <div className="py-6">
           <p className="text-center mb-2">
             {dayjs(log.start).format("YYYY MMM D, ddd HH:mm")}
           </p>

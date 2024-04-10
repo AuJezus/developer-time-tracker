@@ -21,7 +21,7 @@ import { Textarea } from "./ui/Textarea";
 import { Button } from "./ui/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { projectSchema } from "@/lib/formSchema";
+import { projectSchema } from "@/lib/schema/formSchema";
 import { editProjectAndRedirect } from "@/lib/actions/projects";
 
 function ProjectEditForm({ project }) {

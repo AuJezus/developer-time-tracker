@@ -23,7 +23,7 @@ import {
   SelectItem,
 } from "./ui/Select";
 import { Textarea } from "./ui/Textarea";
-import { projectSchema } from "@/lib/formSchema";
+import { projectSchema } from "@/lib/schema/formSchema";
 import { useRouter } from "next/navigation";
 
 function ProjectForm({ repos }) {

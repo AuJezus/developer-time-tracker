@@ -22,9 +22,11 @@ import { Button } from "./ui/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema } from "@/lib/schema/formSchema";
-import { editProjectAndRedirect } from "@/lib/actions/projects";
+import { editProject } from "@/lib/actions/projects";
 
 function ProjectEditForm({ project }) {
+  const editProjectWithId = editProject.bind(null, project.id);
+
   const form = useForm({
     mode: "all",
     resolver: zodResolver(projectSchema),
@@ -38,9 +40,7 @@ function ProjectEditForm({ project }) {
   return (
     <Form {...form}>
       <form
-        action={form.handleSubmit((formData) =>
-          editProjectAndRedirect(project.id, formData)
-        )}
+        action={form.handleSubmit(editProjectWithId)}
         className="grid grid-cols-2 items-start gap-x-12 gap-y-4"
       >
         <FormField

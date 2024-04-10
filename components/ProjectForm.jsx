@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import {
@@ -12,9 +11,9 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/Form";
-import { useForm, useFormState } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createProjectAndRedirect } from "@/lib/actions/projects";
+import { createProject } from "@/lib/actions/projects";
 import {
   Select,
   SelectTrigger,
@@ -24,11 +23,8 @@ import {
 } from "./ui/Select";
 import { Textarea } from "./ui/Textarea";
 import { projectSchema } from "@/lib/schema/formSchema";
-import { useRouter } from "next/navigation";
 
 function ProjectForm({ repos }) {
-  const router = useRouter();
-
   const form = useForm({
     mode: "all",
     resolver: zodResolver(projectSchema),
@@ -42,7 +38,7 @@ function ProjectForm({ repos }) {
   return (
     <Form {...form}>
       <form
-        action={form.handleSubmit(createProjectAndRedirect)}
+        action={form.handleSubmit(createProject)}
         className="grid grid-cols-2 items-start gap-x-12 gap-y-4"
       >
         <FormField

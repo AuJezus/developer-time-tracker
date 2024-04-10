@@ -12,7 +12,6 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/Input";
-import Image from "next/image";
 import { Switch } from "./ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -26,6 +25,8 @@ import {
 } from "./ui/command";
 import { cn } from "@/lib/utils";
 import { profileSchema, timezones } from "@/lib/schema/profileSchema";
+import { updateUserSettings } from "@/lib/actions/user";
+import FileInput from "./FileInput";
 
 function ProfileForm({ user }) {
   const form = useForm({
@@ -43,12 +44,21 @@ function ProfileForm({ user }) {
     },
   });
 
+  async function submit(data) {
+    // Need to use formData to handle files
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(data)) {
+      formData.append(key, value);
+    }
+
+    await updateUserSettings(user.id, formData);
+  }
+
   return (
     <Form {...form}>
       <form
-        action={form.handleSubmit((formData) =>
-          editProjectAndRedirect(project.id, formData)
-        )}
+        action={form.handleSubmit(submit)}
         className="grid grid-cols-2 items-start gap-x-12 gap-y-8"
       >
         <FormField
@@ -186,21 +196,7 @@ function ProfileForm({ user }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Avatar</FormLabel>
-              <div className="flex gap-8 flex-shrink-0">
-                <FormControl>
-                  <Input
-                    className="file:text-primary-foreground text-muted-foreground"
-                    type="file"
-                    {...field}
-                  />
-                </FormControl>
-                <Image
-                  src={field.value}
-                  alt="Profile picture"
-                  width={100}
-                  height={100}
-                />
-              </div>
+              <FileInput field={field} />
               <FormMessage />
             </FormItem>
           )}
@@ -240,69 +236,3 @@ function ProfileForm({ user }) {
 }
 
 export default ProfileForm;
-
-{
-  /* <FormField
-          control={form.control}
-          name="language"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Language</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? languages.find(
-                            (language) => language.value === field.value
-                          )?.label
-                        : "Select language"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
-                      <CommandGroup>
-                        {languages.map((language) => (
-                          <CommandItem
-                            value={language.label}
-                            key={language.value}
-                            onSelect={() => {
-                              form.setValue("language", language.value);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                language.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {language.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                This is the language that will be used in the dashboard.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */
-}

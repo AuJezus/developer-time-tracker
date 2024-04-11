@@ -16,6 +16,11 @@ import LogList from "@/components/LogList";
 import { getUser } from "@/lib/actions/user";
 import Stats from "@/components/Stats";
 import calculateLogStats from "@/lib/helpers/calculateLogStats";
+import * as dayjs from "dayjs";
+import * as utc from "dayjs/plugin/utc";
+import * as timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 async function ProfilePage({ params: { id } }) {
   const user = await getUser();
@@ -25,59 +30,80 @@ async function ProfilePage({ params: { id } }) {
 
   const stats = calculateLogStats(logs);
 
+  const time = user.timezone ? dayjs().tz(user.timezone) : undefined;
+  const githubUrl = `https://github.com/${user.github_username}`;
+
   return (
     <main className="pt-8 mb-12 max-w-[1200px] mx-auto w-full">
       <div className="flex border-b-2 p-6 justify-around mb-8">
         <div className="flex items-center gap-10">
-          <div className="relative w-24 h-24">
-            <Image
-              className="border-2"
-              src={user.avatar_url}
-              alt={`${user.username}'s avatar picture`}
-              fill
-            />
-          </div>
+          <Image
+            className="border-2 object-cover aspect-square"
+            src={user.avatar_url}
+            alt={`${user.username}'s avatar picture`}
+            width={100}
+            height={100}
+          />
           <div className="flex flex-col gap-3">
-            <a href="https://github.com/AuJezus" className="flex gap-2">
+            <a href={githubUrl} className="flex gap-2">
               <h2 className="text-4xl font-semibold underline decoration-primary">
                 {user.username}
               </h2>
               <BiLogoGithub className="text-sm" />
             </a>
-            <p className="flex items-center gap-2 text-muted-foreground text-sm">
-              <BiCodeAlt /> Fullstack web developer
-            </p>
+            {user.title && (
+              <p className="flex items-center gap-2 text-muted-foreground text-sm">
+                <BiCodeAlt /> {user.title}
+              </p>
+            )}
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 justify-center">
           <p className="flex items-center gap-2 text-sm">
-            <BiEnvelope /> Email:
+            <BiLogoGithub /> Github:
             <a
-              href="mailto:augispay@gmail.com"
+              href={githubUrl}
               className="hover:text-foreground text-muted-foreground hover:underline"
             >
-              augispay@gmail.com
+              {user.github_username}
             </a>
           </p>
           <p className="flex items-center gap-2 text-sm">
-            <BiTime /> Time:
-            <span className="hover:text-foreground text-muted-foreground">
-              08:07 (UTC +02:00)
-            </span>
+            <BiEnvelope /> Email:
+            <a
+              href={`mailto:${user.email}`}
+              className="hover:text-foreground text-muted-foreground hover:underline"
+            >
+              {user.email}
+            </a>
           </p>
-          <p className="flex items-center gap-2 text-sm">
-            <BiBriefcase /> Occupation:
-            <span className="hover:text-foreground text-muted-foreground">
-              High-School student
-            </span>
-          </p>
-          <p className="flex items-center gap-2 text-sm">
-            <BiBeenHere /> Lives in:
-            <span className="hover:text-foreground text-muted-foreground">
-              Lithuania, Vilnius
-            </span>
-          </p>
+          {user.timezone && (
+            <p className="flex items-center gap-2 text-sm">
+              <BiTime /> Time:
+              <span className="hover:text-foreground text-muted-foreground">
+                {time.format("HH:mm")} (UTC +
+                {(time.utcOffset() / 60).toString().padStart(2, "0")}:
+                {(time.utcOffset() % 60).toString().padStart(2, "0")})
+              </span>
+            </p>
+          )}
+          {user.occupation && (
+            <p className="flex items-center gap-2 text-sm">
+              <BiBriefcase /> Occupation:
+              <span className="hover:text-foreground text-muted-foreground">
+                {user.occupation}
+              </span>
+            </p>
+          )}
+          {user.place && (
+            <p className="flex items-center gap-2 text-sm">
+              <BiBeenHere /> Lives in:
+              <span className="hover:text-foreground text-muted-foreground">
+                {user.place}
+              </span>
+            </p>
+          )}
         </div>
       </div>
 

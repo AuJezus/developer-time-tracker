@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { getAllLogs } from "@/lib/actions/logs";
+import { getCurrentUserLogs, getUserLogs } from "@/lib/actions/logs";
 import Image from "next/image";
 import {
   BiBeenHere,
@@ -19,14 +19,18 @@ import calculateLogStats from "@/lib/helpers/calculateLogStats";
 import * as dayjs from "dayjs";
 import * as utc from "dayjs/plugin/utc";
 import * as timezone from "dayjs/plugin/timezone";
+import { notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 async function ProfilePage({ params: { id } }) {
-  const user = await getUser();
+  const user = await getUser(id);
 
-  const logs = await getAllLogs();
-  const projects = await getUserProjects();
+  if (!user) notFound();
+
+  const logs = await getUserLogs(id);
+  const projects = await getUserProjects(id);
 
   const stats = calculateLogStats(logs);
 
@@ -131,7 +135,7 @@ async function ProfilePage({ params: { id } }) {
         </TabsContent>
 
         <TabsContent value="logs" asChild>
-          <LogList logs={logs} />
+          <LogList logs={logs} projects={projects} />
         </TabsContent>
       </Tabs>
     </main>

@@ -1,8 +1,14 @@
 import ProfileForm from "@/components/ProfileForm";
 import { getUser } from "@/lib/actions/user";
+import { createClient } from "@/lib/supabase/server";
 
 async function ProfileSettingsPage() {
-  const user = await getUser();
+  const supabase = createClient();
+  const {
+    data: { user: userAuth },
+  } = await supabase.auth.getUser();
+
+  const user = await getUser(userAuth.id);
 
   return (
     <main className="max-w-[1200px] mx-auto w-full mt-12">

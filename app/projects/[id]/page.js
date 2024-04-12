@@ -5,14 +5,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { getProjectLogs } from "@/lib/actions/logs";
 import { getProject } from "@/lib/actions/projects";
 import calculateLogStats from "@/lib/helpers/calculateLogStats";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { BiEdit, BiEditAlt, BiLogoGithub, BiTime } from "react-icons/bi";
+import { notFound } from "next/navigation";
+import { BiEdit, BiLogoGithub, BiTime } from "react-icons/bi";
 
 async function ProjectsPage({ params: { id } }) {
   const project = await getProject(id);
+  if (!project) notFound();
+
   const logs = await getProjectLogs(id);
 
   const stats = calculateLogStats(logs);
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isOwner = project.user_id === user.id;
 
   return (
     <main className="max-w-[1200px] mx-auto w-full mt-12 relative">
@@ -24,9 +34,11 @@ async function ProjectsPage({ params: { id } }) {
           <a href={project.github_repo_url}>
             <BiLogoGithub className="text-muted-foreground hover:text-primary-foreground transition-colors" />
           </a>
-          <Link href={`/projects/${id}/edit`}>
-            <BiEdit className="text-muted-foreground hover:text-yellow-500 transition-colors" />
-          </Link>
+          {isOwner && (
+            <Link href={`/projects/${id}/edit`}>
+              <BiEdit className="text-muted-foreground hover:text-yellow-500 transition-colors" />
+            </Link>
+          )}
         </h1>
         <p className="text-muted-foreground">{project.description}</p>
       </div>
@@ -48,7 +60,7 @@ async function ProjectsPage({ params: { id } }) {
         </TabsList>
 
         <TabsContent value="logs" asChild>
-          <LogList logs={logs} />
+          <LogList logs={logs} projects={[project]} />
         </TabsContent>
       </Tabs>
     </main>

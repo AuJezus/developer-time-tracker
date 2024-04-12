@@ -11,7 +11,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getActiveLog, getActiveLogCount } from "@/lib/actions/logs";
-import { getUserProjects } from "@/lib/actions/projects";
+import { getCurrentUserProjects } from "@/lib/actions/projects";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -44,7 +44,7 @@ export default async function RootLayout({ children }) {
 
     const projects = await queryClient.fetchQuery({
       queryKey: ["projects"],
-      queryFn: () => getUserProjects(),
+      queryFn: () => getCurrentUserProjects(),
     });
   }
 

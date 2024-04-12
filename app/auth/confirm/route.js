@@ -53,10 +53,12 @@ export async function GET(request) {
         data.session.expires_in +
         PROVIDER_REFRESH_INTERVAL;
 
-      const { error: errorProvider } = await supabase
-        .from("users")
-        .update({ provider_token, provider_refresh_token, provider_expires_at })
-        .eq("id", user.id);
+      const { error: errorProvider } = await supabase.from("tokens").upsert({
+        user_id: user.id,
+        provider_token,
+        provider_refresh_token,
+        provider_expires_at,
+      });
 
       if (!errorProvider) {
         return NextResponse.redirect(redirectTo);

@@ -68,6 +68,7 @@ async function WorkPage() {
 
             <WorkTimer
               initialDuration={initialDuration.format("PD[D]TH[H]m[M]s[S]")}
+              project={project}
             />
           </div>
 

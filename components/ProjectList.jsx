@@ -1,6 +1,7 @@
 import { BiLogoGithub, BiTime } from "react-icons/bi";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
+import Link from "next/link";
 dayjs.extend(duration);
 
 function Project({ project, logs }) {
@@ -18,7 +19,9 @@ function Project({ project, logs }) {
   return (
     <div className="border-2 group hover:border-primary transition-all hover:scale-105 rounded-lg p-4 flex flex-col">
       <div className="flex justify-between items-start mb-2">
-        <p className="text-lg">{project.name}</p>
+        <Link href={`/projects/${project.id}`} className="text-lg">
+          {project.name}
+        </Link>
         <a
           href="lol"
           className="text-sm flex items-center gap-1 transition-colors text-muted-foreground hover:text-primary-foreground w-fit"
@@ -46,6 +49,7 @@ function Project({ project, logs }) {
 function ProjectList({ projects, logs }) {
   return (
     <div className="grid grid-cols-3 gap-6">
+      {!projects.length && <p>No projects yet :(</p>}
       {projects.map((project) => (
         <Project
           key={project.id}

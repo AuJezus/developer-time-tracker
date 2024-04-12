@@ -8,6 +8,8 @@ import { getRepoActivity } from "@/lib/actions/github";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import BackLink from "@/components/ui/BackLink";
+import Link from "next/link";
+import { BiCode } from "react-icons/bi";
 dayjs.extend(duration);
 
 async function LogPage({ params: { id } }) {
@@ -36,6 +38,13 @@ async function LogPage({ params: { id } }) {
           </p>
 
           <Timer log={log} duration={duration} />
+
+          <Link
+            href={`/projects/${project.id}`}
+            className="flex items-center gap-2 justify-center hover:text-primary-foreground transition-colors text-muted-foreground mb-6"
+          >
+            <BiCode /> {project.name}
+          </Link>
         </div>
 
         <div className="py-6">

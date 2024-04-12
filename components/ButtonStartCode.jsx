@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getUserProjects } from "@/lib/actions/projects";
+import { getCurrentUserProjects } from "@/lib/actions/projects";
 import {
   Select,
   SelectContent,
@@ -33,7 +33,7 @@ function ButtonStartCode() {
 
   const { data: projects } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => getUserProjects(),
+    queryFn: () => getCurrentUserProjects(),
   });
 
   return (

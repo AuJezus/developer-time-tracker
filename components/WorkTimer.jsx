@@ -11,9 +11,11 @@ import useResumeMutation from "@/lib/mutations/useResumeMutation";
 import useEndMutation from "@/lib/mutations/useEndMutation";
 import calculateDuration from "@/lib/helpers/calculateDuration";
 import Timer from "./Timer";
+import Link from "next/link";
+import { BiCode } from "react-icons/bi";
 dayjs.extend(duration);
 
-function WorkTimer({ initialDuration }) {
+function WorkTimer({ initialDuration, project }) {
   const queryClient = useQueryClient();
 
   const { data: log, errorLog } = useQuery({
@@ -60,6 +62,13 @@ function WorkTimer({ initialDuration }) {
   return (
     <div>
       <Timer log={log} duration={duration} />
+
+      <Link
+        href={`/projects/${project.id}`}
+        className="flex items-center gap-2 justify-center hover:text-primary-foreground transition-colors text-muted-foreground mb-6"
+      >
+        <BiCode /> {project.name}
+      </Link>
 
       <div className="flex gap-6 justify-center">
         {!log.is_paused && (

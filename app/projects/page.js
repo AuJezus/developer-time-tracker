@@ -1,10 +1,10 @@
 import ProjectList from "@/components/ProjectList";
-import { getAllLogs } from "@/lib/actions/logs";
-import { getUserProjects } from "@/lib/actions/projects";
+import { getCurrentUserLogs } from "@/lib/actions/logs";
+import { getCurrentUserProjects } from "@/lib/actions/projects";
 
 async function ProjectsPage() {
-  const projects = await getUserProjects();
-  const logs = await getAllLogs();
+  const projects = await getCurrentUserProjects();
+  const logs = await getCurrentUserLogs();
 
   return (
     <main className="max-w-[1200px] mx-auto w-full mt-12">

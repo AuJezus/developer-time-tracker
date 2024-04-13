@@ -13,7 +13,6 @@ import {
 import { getActiveLog, getActiveLogCount } from "@/lib/actions/logs";
 import { getCurrentUserProjects } from "@/lib/actions/projects";
 import { getUser } from "@/lib/actions/user";
-import { getUser } from "@/lib/actions/user";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 

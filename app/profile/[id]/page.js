@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { getCurrentUserLogs, getUserLogs } from "@/lib/actions/logs";
+import { getUserLogs } from "@/lib/actions/logs";
 import Image from "next/image";
 import {
   BiBeenHere,
@@ -20,7 +20,6 @@ import * as dayjs from "dayjs";
 import * as utc from "dayjs/plugin/utc";
 import * as timezone from "dayjs/plugin/timezone";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 

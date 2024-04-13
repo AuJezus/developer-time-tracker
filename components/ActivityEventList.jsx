@@ -1,8 +1,6 @@
 import { BiCategory, BiLogoGithub } from "react-icons/bi";
 import * as dayjs from "dayjs";
 
-const eventNames = { PushEvent: "Push" };
-
 function ActivityEvent({ event }) {
   return (
     <div className="border-2 text-sm text-muted-foreground hover:text-primary-foreground group p-4 rounded-lg hover:border-primary transition-all hover:scale-105">
@@ -12,7 +10,7 @@ function ActivityEvent({ event }) {
 
       <div className="flex gap-x-4 mb-4 flex-wrap transition-colors">
         <p className="mb-2 flex items-center gap-2">
-          <BiCategory /> {eventNames[event.type]}
+          <BiCategory /> {event.type.replace("Event", "")}
         </p>
         <a
           href={"https://github.com/" + event.repo.name}
@@ -30,23 +28,24 @@ function ActivityEvent({ event }) {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        {event.payload.commits.map((commit) => (
-          <div key={commit.sha} className="text-sm">
-            <a
-              href={[
-                "https://github.com",
-                event.repo.name,
-                "commit",
-                commit.sha,
-              ].join("/")}
-              target="_blank"
-              className="flex gap-2 border-2 px-2 py-1 rounded-md hover:bg-secondary transition-colors items-baseline"
-            >
-              <BiLogoGithub className="flex-shrink-0" />
-              &quot;{commit.message}&quot;
-            </a>
-          </div>
-        ))}
+        {event.payload.commits &&
+          event.payload.commits.map((commit) => (
+            <div key={commit.sha} className="text-sm">
+              <a
+                href={[
+                  "https://github.com",
+                  event.repo.name,
+                  "commit",
+                  commit.sha,
+                ].join("/")}
+                target="_blank"
+                className="flex gap-2 border-2 px-2 py-1 rounded-md hover:bg-secondary transition-colors items-baseline"
+              >
+                <BiLogoGithub className="flex-shrink-0" />
+                &quot;{commit.message}&quot;
+              </a>
+            </div>
+          ))}
       </div>
     </div>
   );

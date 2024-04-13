@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { refreshProviderToken } from "@/lib/github/utils";
 
 export const PROVIDER_REFRESH_INTERVAL = 8 * 60 * 60;
 
@@ -48,21 +49,9 @@ export async function GET(request) {
 
       // Update provider info
       const { user, provider_token, provider_refresh_token } = data.session;
-      const provider_expires_at =
-        data.session.expires_at -
-        data.session.expires_in +
-        PROVIDER_REFRESH_INTERVAL;
+      await refreshProviderToken({ provider_refresh_token }, user.id);
 
-      const { error: errorProvider } = await supabase.from("tokens").upsert({
-        user_id: user.id,
-        provider_token,
-        provider_refresh_token,
-        provider_expires_at,
-      });
-
-      if (!errorProvider) {
-        return NextResponse.redirect(redirectTo);
-      }
+      return NextResponse.redirect(redirectTo);
     }
   }
 

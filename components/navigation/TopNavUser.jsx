@@ -32,7 +32,7 @@ function TopNavUser({ user }) {
               <li>
                 <NavigationMenuLink asChild>
                   <Link
-                    href={"/profile"}
+                    href={`/profile/${user.id}`}
                     className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
                   >
                     <BiUser /> Profile
@@ -42,7 +42,7 @@ function TopNavUser({ user }) {
               <li>
                 <NavigationMenuLink asChild>
                   <Link
-                    href={"/settings"}
+                    href={"/profile/settings"}
                     className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
                   >
                     <BiWrench /> Settings

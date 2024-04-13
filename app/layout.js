@@ -27,7 +27,7 @@ export default async function RootLayout({ children }) {
     data: { user: userAuth },
   } = await supabase.auth.getUser();
 
-  const user = await getUser(userAuth.id);
+  const user = userAuth && (await getUser(userAuth.id));
 
   const queryClient = new QueryClient();
 

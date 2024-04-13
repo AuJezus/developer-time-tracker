@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 
-import { BiTerminal, BiUser, BiWrench } from "react-icons/bi";
+import { BiTerminal, BiUser, BiUserX, BiWrench } from "react-icons/bi";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -10,6 +10,7 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from "../ui/NavigationMenu";
+import { signOut } from "@/lib/actions/auth";
 
 function TopNavUser({ user }) {
   return (
@@ -56,6 +57,18 @@ function TopNavUser({ user }) {
                   >
                     <BiTerminal /> My Projects
                   </Link>
+                </NavigationMenuLink>
+              </li>
+              <li>
+                <NavigationMenuLink asChild>
+                  <form
+                    action={signOut}
+                    className="py-2 hover:bg-secondary px-4 transition-colors"
+                  >
+                    <button className="flex gap-2 items-center" type="submit">
+                      <BiUserX /> Sign out
+                    </button>
+                  </form>
                 </NavigationMenuLink>
               </li>
             </ul>

@@ -24,10 +24,7 @@ export default async function RootLayout({ children }) {
   const supabase = createClient();
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
-
-  if (error) console.error(error);
 
   const queryClient = new QueryClient();
 
@@ -57,8 +54,6 @@ export default async function RootLayout({ children }) {
         )}
       >
         <ReactQueryProvider>
-          {/* <NavWrapper>{children}</NavWrapper> */}
-
           <div className="flex flex-col min-h-screen">
             <HydrationBoundary state={dehydrate(queryClient)}>
               <TopNav user={user} />

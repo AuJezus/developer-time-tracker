@@ -7,7 +7,7 @@ export async function POST(req) {
 
   // Check if a user's logged in
   const {
-    data: { user },
+    data: { user, error },
   } = await supabase.auth.getUser();
 
   if (user) {

@@ -1,7 +1,14 @@
 import ButtonGithub from "@/components/ButtonGithub";
-import ButtonSignOut from "@/components/ButtonSignOut";
+import { Button } from "@/components/ui/Button";
+import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <main className="flex h-screen w-full justify-center items-center flex-col gap-8">
       <h1 className="capitalize text-5xl underline decoration-primary">
@@ -12,8 +19,12 @@ export default function Home() {
         tracking tool tailored specifically for developers. Stay focused,
         organized, and maximize productivity effortlessly.
       </p>
-      <ButtonGithub />
-      <ButtonSignOut />
+      {!user && <ButtonGithub />}
+      {user && (
+        <Link href={`profile/${user.id}`}>
+          <Button>Go to profile</Button>
+        </Link>
+      )}
     </main>
   );
 }

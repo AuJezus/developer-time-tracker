@@ -27,7 +27,7 @@ function TopNav({ user }) {
     <div
       className={`${
         isScrollUp ? "" : "-translate-y-full"
-      } flex justify-between border-b-2 sticky top-0 bg-background items-center px-12 py-2 transition-transform`}
+      } flex justify-between border-b-2 sticky top-0 bg-background items-center px-12 py-2 transition-transform z-10`}
     >
       <p className="text-2xl font-bold">dev-tracker</p>
       <div className="flex items-center text-sm gap-1">

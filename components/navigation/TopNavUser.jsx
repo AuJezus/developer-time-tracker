@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 
-import { BiTerminal, BiUser, BiUserX, BiWrench } from "react-icons/bi";
+import { BiTerminal, BiTime, BiUser, BiUserX, BiWrench } from "react-icons/bi";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -56,6 +56,16 @@ function TopNavUser({ user }) {
                     className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
                   >
                     <BiTerminal /> My Projects
+                  </Link>
+                </NavigationMenuLink>
+              </li>
+              <li>
+                <NavigationMenuLink asChild>
+                  <Link
+                    href={"/logs"}
+                    className="flex gap-2 items-center py-2 hover:bg-secondary px-4 transition-colors"
+                  >
+                    <BiTime /> My Logs
                   </Link>
                 </NavigationMenuLink>
               </li>

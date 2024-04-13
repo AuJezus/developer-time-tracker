@@ -30,7 +30,10 @@ function ActivityEvent({ event }) {
       <div className="flex flex-wrap gap-3">
         {event.payload.commits &&
           event.payload.commits.map((commit) => (
-            <div key={commit.sha} className="text-sm">
+            <div
+              key={commit.sha}
+              className="text-sm max-w-full overflow-hidden"
+            >
               <a
                 href={[
                   "https://github.com",

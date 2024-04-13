@@ -56,22 +56,33 @@ function ButtonStartCode() {
           </p>
         )}
         {projects && (
-          <form action={startLog} className="flex gap-2">
-            <Select name="project_id" required>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Project" />
-              </SelectTrigger>
-              <SelectContent>
-                {projects.map((project) => (
-                  <SelectItem key={project.id} value={project.id.toString()}>
-                    {project.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <>
+            <form action={startLog} className="flex gap-2 mb-3">
+              <Select name="project_id" required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Project" />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((project) => (
+                    <SelectItem key={project.id} value={project.id.toString()}>
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <FormButton>Start!</FormButton>
-          </form>
+              <FormButton>Start!</FormButton>
+            </form>
+
+            <Link href="/projects/new" className="flex justify-center gap-4">
+              <p className="text-sm text-muted-foreground my-3 text-center">
+                or
+              </p>
+              <Button onClick={() => setOpen(false)} variant="outline">
+                New project
+              </Button>
+            </Link>
+          </>
         )}
       </PopoverContent>
     </Popover>

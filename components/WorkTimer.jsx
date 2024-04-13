@@ -13,6 +13,7 @@ import calculateDuration from "@/lib/helpers/calculateDuration";
 import Timer from "./Timer";
 import Link from "next/link";
 import { BiCode } from "react-icons/bi";
+import { calculateCommits } from "@/lib/helpers/calculateCommits";
 dayjs.extend(duration);
 
 function WorkTimer({ initialDuration, project }) {
@@ -41,9 +42,9 @@ function WorkTimer({ initialDuration, project }) {
 
   const [duration, setDuration] = useState(dayjs.duration(initialDuration));
 
-  function calculateCommits() {
-    const activity = queryClient.getQueryData([["log", "activity", log?.id]]);
-    return activity?.events?.length || 0;
+  function getCommitCount() {
+    const activity = queryClient.getQueryData(["log", "activity", log?.id]);
+    return calculateCommits(activity);
   }
 
   useEffect(() => {
@@ -105,7 +106,7 @@ function WorkTimer({ initialDuration, project }) {
               logId: log.id,
               time: dayjs().toISOString(),
               duration: Math.floor(duration.asSeconds()),
-              commits: calculateCommits(),
+              commits: getCommitCount(),
             })
           }
           disabled={isPending}

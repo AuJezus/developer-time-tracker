@@ -1,3 +1,4 @@
+import { calculateCommits } from "@/lib/helpers/calculateCommits";
 import { BiLogoGithub } from "react-icons/bi";
 
 function ActivitySummarry({ activity }) {
@@ -10,7 +11,7 @@ function ActivitySummarry({ activity }) {
         -- {activity.stats ? activity.stats.deletions : 0}
       </div>
       <div className="border-2 py-1 px-2 rounded-md flex items-center gap-2 hover:bg-secondary">
-        <BiLogoGithub /> {activity.events.length}
+        <BiLogoGithub /> {calculateCommits(activity)}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/Input";
-import { Switch } from "./ui/switch";
+import { Switch } from "./ui/Switch";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
@@ -22,7 +22,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "./ui/command";
+} from "./ui/Command";
 import { cn } from "@/lib/utils";
 import { profileSchema, timezones } from "@/lib/schema/profileSchema";
 import { updateUserSettings } from "@/lib/actions/user";

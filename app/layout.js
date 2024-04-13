@@ -12,6 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { getActiveLog, getActiveLogCount } from "@/lib/actions/logs";
 import { getCurrentUserProjects } from "@/lib/actions/projects";
+import { getUser } from "@/lib/actions/user";
 
 const fontMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
@@ -23,8 +24,10 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const supabase = createClient();
   const {
-    data: { user },
+    data: { user: userAuth },
   } = await supabase.auth.getUser();
+
+  const user = await getUser(userAuth.id);
 
   const queryClient = new QueryClient();
 

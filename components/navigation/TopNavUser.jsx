@@ -20,9 +20,9 @@ function TopNavUser({ user }) {
           <NavigationMenuTrigger>
             <Link href="/profile" className="flex items-center gap-2 group">
               <BiUser />
-              <p>{user.user_metadata.user_name}</p>
+              <p>{user.username}</p>
               <Avatar className="border-2 group-hover:border-transparent transition-colors">
-                <AvatarImage src={user.user_metadata.avatar_url} />
+                <AvatarImage className="object-cover" src={user.avatar_url} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </Link>
